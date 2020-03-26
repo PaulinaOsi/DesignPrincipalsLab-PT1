@@ -1,3 +1,14 @@
+/*
+Paulina Osikoya
+G00348898
+Group C
+Lecturer: Paul Lennon
+Date: 26/3/2020
+Assignment Objective: To use the learnings in the Design Princpal lab to apply them to this assignment
+and understand the benefits and advantages it gives to programming
+ */
+
+
 package ie.gmit.single;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +22,11 @@ public class UserController {
     //Handles incoming JSON requests that work on User resource/entity
 
         //Store used by controller
-        private Store store = new Store();
+        /*Added two new classes Userstorage and Uservalidation to compile with
+          single responsibility rule
+         */
+        private UserStorage storage = new UserStorage();
+        private UserValidation uvalidation = new UserValidation();
 
         //Create a new user
         public String createUser(String userJson) throws IOException {
@@ -19,51 +34,13 @@ public class UserController {
 
             User user = mapper.readValue(userJson, User.class);
 
-            if(!isValidUser(user)) {
+            if(!uvalidation.success(user)) {
                 return "ERROR";
             }
 
-            store.store(user);
+            storage.storeUser(user);
 
             return "SUCCESS";
-        }
-
-        //Validates the user object
-        private boolean isValidUser(User user) {
-            if(!isPresent(user.getName())) {
-                return false;
-            }
-            user.setName(user.getName().trim());
-
-            if(!isValidAlphaNumeric(user.getName())) {
-                return false;
-            }
-            if(user.getEmail() == null || user.getEmail().trim().length() == 0) {
-                return false;
-            }
-            user.setEmail(user.getEmail().trim());
-            if(!isValidEmail(user.getEmail())) {
-                return false;
-            }
-            return true;
-        }
-
-        //Simply checks if value is null or empty..
-        private boolean isPresent(String value) {
-            return value != null && value.trim().length() > 0;
-        }
-        //check string for special characters
-        private boolean isValidAlphaNumeric(String value) {
-            Pattern pattern = Pattern.compile("[^A-Za-z0-9]");
-            Matcher matcher = pattern.matcher(value);
-            return !matcher.find();
-        }
-        //check string for valid email address - this is not for prod.
-        //Just for demo. This fails for lots of valid emails.
-        private boolean isValidEmail(String value) {
-            Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-            Matcher matcher = pattern.matcher(value);
-            return matcher.find();
         }
 
  }

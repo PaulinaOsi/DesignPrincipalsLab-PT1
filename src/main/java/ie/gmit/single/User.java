@@ -1,14 +1,20 @@
+/*
+Paulina Osikoya
+G00348898
+Group C
+Lecturer: Paul Lennon
+Date: 26/3/2020
+Assignment Objective: To use the learnings in the Design Princpal lab to apply them to this assignment
+and understand the benefits and advantages it gives to programming
+ */
+
 package ie.gmit.single;
 
 //User
 public class User {
-
     private String name;
-
     private String email;
-
     private String address;
-
     public User() {
 
     }
